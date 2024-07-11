@@ -29,11 +29,23 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //For FCC testing purposes and enables user to connect from outside the hosting platform
 app.use(cors({ origin: '*' }));
 
+app.use((req, res, next) => {
+  res.setHeader('X-Powered-By', 'PHP 7.4');
+  res.setHeader("X-Powered-By", "PHP 7.4.3");
+  res.setHeader("X-Xss-Protection", "1; mode=block");
+  next();
+});
+
+//For FCC testing purposes
+fccTestingRoutes(app);
+
+app.route('/_api').get(function (req, res) {
+  res.json({ message: "OK" });
+});
+
 // Index page (static HTML)
 app.route('/')
   .get(function (req, res) {
-    res.setHeader("X-Powered-By", "PHP 7.4.3");
-    res.setHeader("X-Xss-Protection", "1; mode=block");
     res.sendFile(process.cwd() + '/views/index.html');
   });
 let players = [];
@@ -88,8 +100,7 @@ io.sockets.on('connection', (socket) => {
     callUpdate(io);
   })
 });
-//For FCC testing purposes
-fccTestingRoutes(app);
+
 
 // 404 Not Found Middleware
 app.use(function (req, res, next) {
