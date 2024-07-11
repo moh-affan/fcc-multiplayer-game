@@ -30,7 +30,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors({ origin: '*' }));
 
 app.use((req, res, next) => {
-  res.setHeader('X-Powered-By', 'PHP 7.4');
   res.setHeader("X-Powered-By", "PHP 7.4.3");
   res.setHeader("X-Xss-Protection", "1; mode=block");
   next();
